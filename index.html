@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultoria em Saúde do Trabalhador - Treino de Habilidades</title>
+    <title>Consultoria Rui - Saúde do Trabalhador</title>
     <style>
-        /* CONFIGURAÇÕES DE DESIGN (UI) */
         :root {
             --primary: #4A90E2;
             --secondary: #2ECC71;
-            --accent: #F39C12;
             --bg: #F0F4F8;
             --text: #2C3E50;
-            --white: #ffffff;
         }
 
         body { 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
+            font-family: 'Segoe UI', sans-serif; 
             background: var(--bg); 
             margin: 0; 
             display: flex; 
@@ -26,20 +23,18 @@
         }
 
         #app-card { 
-            background: var(--white); 
+            background: white; 
             width: 90%; 
             max-width: 450px; 
             border-radius: 25px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
             padding: 30px; 
-            transition: all 0.3s ease;
+            text-align: center;
         }
 
-        /* TELAS */
-        .tela { display: none; animation: fadeIn 0.5s ease-out; }
-        .ativa { display: block; }
+        .tela { display: none; }
+        .ativa { display: block; animation: fadeIn 0.4s; }
 
-        /* INPUTS E BOTÕES */
         input[type="text"] {
             width: 100%;
             padding: 15px;
@@ -58,49 +53,42 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
-            transition: 0.3s;
             margin-top: 10px;
+            transition: 0.2s;
         }
 
         .btn-primario { background: var(--primary); color: white; }
-        .btn-sucesso { background: var(--secondary); color: white; }
-        .btn-whatsapp { background: #25D366; color: white; margin-top: 20px; }
         .btn-opcao { 
             background: white; 
             border: 2px solid #E2E8F0; 
             text-align: left; 
             margin-bottom: 12px;
             border-radius: 15px;
-            color: var(--text);
+            padding: 15px;
         }
-        .btn-opcao:hover { border-color: var(--primary); background: #F7FAFC; }
+        .btn-whatsapp { background: #25D366; color: white; margin-top: 20px; }
 
-        /* BARRA DE PROGRESSO */
-        .progress-bar-bg { background: #EDF2F7; height: 10px; border-radius: 5px; margin: 20px 0; overflow: hidden; }
-        #progress-fill { background: var(--primary); width: 0%; height: 100%; transition: 0.5s; }
+        .progress-bg { background: #EDF2F7; height: 10px; border-radius: 5px; margin: 20px 0; }
+        #progress-fill { background: var(--primary); width: 0%; height: 100%; transition: 0.5s; border-radius: 5px; }
 
-        /* FEEDBACK E PONTOS */
-        .feedback-box { background: #EBF8FF; padding: 20px; border-radius: 15px; color: #2B6CB0; margin-bottom: 20px; border: 1px solid #BEE3F8; }
-        .pontos-badge { color: var(--accent); font-weight: bold; font-size: 1.2em; }
+        .feedback-box { background: #EBF8FF; padding: 20px; border-radius: 15px; color: #2B6CB0; margin-bottom: 20px; text-align: left; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div id="app-card">
     <div id="tela-inicio" class="tela ativa">
-        <h2 style="color: var(--primary);">Bem-vindo à Consultoria</h2>
-        <p>Vamos treinar as suas habilidades sociais para um ambiente de trabalho mais saudável.</p>
-        <label>Qual é o seu nome?</label>
-        <input type="text" id="nome-usuario" placeholder="Escreva o seu nome aqui...">
+        <h2 style="color: var(--primary);">Treino de Habilidades</h2>
+        <p>Desenvolva a sua comunicação no trabalho.</p>
+        <input type="text" id="nome-usuario" placeholder="Digite o seu nome...">
         <button class="btn-geral btn-primario" onclick="iniciarTreino()">Começar Treino →</button>
     </div>
 
     <div id="tela-treino" class="tela">
-        <div class="progress-bar-bg"><div id="progress-fill"></div></div>
-        <p id="info-pergunta" style="color: #718096; font-size: 0.9em;"></p>
-        <h3 id="texto-cenario">Cenário...</h3>
+        <div class="progress-bg"><div id="progress-fill"></div></div>
+        <h3 id="texto-cenario" style="text-align: left;">Cenário...</h3>
         <div id="lista-opcoes"></div>
     </div>
 
@@ -109,14 +97,93 @@
         <button class="btn-geral btn-primario" onclick="proximaPergunta()">Continuar →</button>
     </div>
 
-    <div id="tela-final" class="tela" style="text-align: center;">
-        <h1 style="color: var(--secondary);">Treino Concluído!</h1>
+    <div id="tela-final" class="tela">
+        <h1 style="color: var(--secondary);">Concluído! ✅</h1>
         <p id="mensagem-final"></p>
-        <p>Pontuação Total: <span id="pontos-final" class="pontos-badge">0</span> pontos</p>
         <button class="btn-geral btn-whatsapp" onclick="partilharWhatsApp()">Partilhar no WhatsApp 📱</button>
-        <button class="btn-geral" style="background:#CBD5E0" onclick="location.reload()">Reiniciar</button>
+        <button class="btn-geral" style="background:#CBD5E0" onclick="location.reload()">Refazer</button>
     </div>
 </div>
 
 <script>
-    // BASE DE DADOS E
+    const perguntas = [
+        {
+            cenario: "O supervisor pede algo no sábado à tarde. Como reage?",
+            opcoes: [
+                { texto: "Respondo logo para ser prestável.", feedback: "Cuidado! Estar sempre disponível aumenta o risco de burnout." },
+                { texto: "Respondo na segunda de forma profissional.", feedback: "Excelente! Definir limites é essencial para a saúde mental." },
+                { texto: "Ignoro e fico ansioso.", feedback: "A omissão gera stress. A comunicação clara é melhor." }
+            ]
+        },
+        {
+            cenario: "Um colega cometeu um erro que o afetou diretamente.",
+            opcoes: [
+                { texto: "Digo: 'Notei um erro no processo, podemos rever?'.", feedback: "Ótimo! Focou no problema e não na culpa." },
+                { texto: "Digo que ele está sempre a errar.", feedback: "Isso gera agressividade e quebra a confiança da equipa." },
+                { texto: "Refaço o trabalho sem dizer nada.", feedback: "Isto sobrecarrega-o e o colega não aprende." }
+            ]
+        }
+    ];
+
+    let indiceAtual = 0;
+    let nomeUsuario = "";
+
+    function trocarTela(idAtiva) {
+        // Esconde todas as telas
+        document.getElementById('tela-inicio').classList.remove('ativa');
+        document.getElementById('tela-treino').classList.remove('ativa');
+        document.getElementById('tela-feedback').classList.remove('ativa');
+        document.getElementById('tela-final').classList.remove('ativa');
+        // Mostra a tela desejada
+        document.getElementById(idAtiva).classList.add('ativa');
+    }
+
+    function iniciarTreino() {
+        const inputNome = document.getElementById('nome-usuario').value;
+        if(inputNome.trim() === "") {
+            alert("Por favor, insira o seu nome para começar.");
+            return;
+        }
+        nomeUsuario = inputNome;
+        trocarTela('tela-treino');
+        carregarQuestao();
+    }
+
+    function carregarQuestao() {
+        const p = perguntas[indiceAtual];
+        document.getElementById('texto-cenario').innerText = p.cenario;
+        document.getElementById('progress-fill').style.width = (indiceAtual / perguntas.length) * 100 + "%";
+        
+        const lista = document.getElementById('lista-opcoes');
+        lista.innerHTML = "";
+        
+        p.opcoes.forEach(op => {
+            const btn = document.createElement('button');
+            btn.className = "btn-geral btn-opcao";
+            btn.innerText = op.texto;
+            btn.onclick = () => {
+                document.getElementById('feedback-msg').innerText = op.feedback;
+                trocarTela('tela-feedback');
+            };
+            lista.appendChild(btn);
+        });
+    }
+
+    function proximaPergunta() {
+        indiceAtual++;
+        if (indiceAtual < perguntas.length) {
+            trocarTela('tela-treino');
+            carregarQuestao();
+        } else {
+            document.getElementById('mensagem-final').innerText = "Parabéns, " + nomeUsuario + "! Completou o seu treino de saúde mental.";
+            trocarTela('tela-final');
+        }
+    }
+
+    function partilharWhatsApp() {
+        const msg = "Olá! Eu sou o " + nomeUsuario + " e acabei de treinar as minhas Habilidades Sociais! 🚀";
+        window.open("https://wa.me/?text=" + encodeURIComponent(msg), '_blank');
+    }
+</script>
+</body>
+</html>
