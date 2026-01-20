@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultoria em Saúde do Trabalhador - Treino de Habilidades</title>
+    <style>
+        /* CONFIGURAÇÕES DE DESIGN (UI) */
+        :root {
+            --primary: #4A90E2;
+            --secondary: #2ECC71;
+            --accent: #F39C12;
+            --bg: #F0F4F8;
+            --text: #2C3E50;
+            --white: #ffffff;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+        }
+
+        #app-card { 
+            background: var(--white); 
+            width: 90%; 
+            max-width: 450px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            padding: 30px; 
+            transition: all 0.3s ease;
+        }
+
+        /* TELAS */
+        .tela { display: none; animation: fadeIn 0.5s ease-out; }
+        .ativa { display: block; }
+
+        /* INPUTS E BOTÕES */
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .btn-geral {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primario { background: var(--primary); color: white; }
+        .btn-sucesso { background: var(--secondary); color: white; }
+        .btn-whatsapp { background: #25D366; color: white; margin-top: 20px; }
+        .btn-opcao { 
+            background: white; 
+            border: 2px solid #E2E8F0; 
+            text-align: left; 
+            margin-bottom: 12px;
+            border-radius: 15px;
+            color: var(--text);
+        }
+        .btn-opcao:hover { border-color: var(--primary); background: #F7FAFC; }
+
+        /* BARRA DE PROGRESSO */
+        .progress-bar-bg { background: #EDF2F7; height: 10px; border-radius: 5px; margin: 20px 0; overflow: hidden; }
+        #progress-fill { background: var(--primary); width: 0%; height: 100%; transition: 0.5s; }
+
+        /* FEEDBACK E PONTOS */
+        .feedback-box { background: #EBF8FF; padding: 20px; border-radius: 15px; color: #2B6CB0; margin-bottom: 20px; border: 1px solid #BEE3F8; }
+        .pontos-badge { color: var(--accent); font-weight: bold; font-size: 1.2em; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="app-card">
+    <div id="tela-inicio" class="tela ativa">
+        <h2 style="color: var(--primary);">Bem-vindo à Consultoria</h2>
+        <p>Vamos treinar as suas habilidades sociais para um ambiente de trabalho mais saudável.</p>
+        <label>Qual é o seu nome?</label>
+        <input type="text" id="nome-usuario" placeholder="Escreva o seu nome aqui...">
+        <button class="btn-geral btn-primario" onclick="iniciarTreino()">Começar Treino →</button>
+    </div>
+
+    <div id="tela-treino" class="tela">
+        <div class="progress-bar-bg"><div id="progress-fill"></div></div>
+        <p id="info-pergunta" style="color: #718096; font-size: 0.9em;"></p>
+        <h3 id="texto-cenario">Cenário...</h3>
+        <div id="lista-opcoes"></div>
+    </div>
+
+    <div id="tela-feedback" class="tela">
+        <div id="feedback-msg" class="feedback-box"></div>
+        <button class="btn-geral btn-primario" onclick="proximaPergunta()">Continuar →</button>
+    </div>
+
+    <div id="tela-final" class="tela" style="text-align: center;">
+        <h1 style="color: var(--secondary);">Treino Concluído!</h1>
+        <p id="mensagem-final"></p>
+        <p>Pontuação Total: <span id="pontos-final" class="pontos-badge">0</span> pontos</p>
+        <button class="btn-geral btn-whatsapp" onclick="partilharWhatsApp()">Partilhar no WhatsApp 📱</button>
+        <button class="btn-geral" style="background:#CBD5E0" onclick="location.reload()">Reiniciar</button>
+    </div>
+</div>
+
+<script>
+    // BASE DE DADOS E
