@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultoria Rui - Saúde do Trabalhador</title>
+    <title>Consultoria Rui - Acesso Restrito</title>
     <style>
         :root {
             --primary: #4A90E2;
@@ -35,10 +35,10 @@
         .tela { display: none; }
         .ativa { display: block; animation: fadeIn 0.4s; }
 
-        input[type="text"] {
+        input {
             width: 100%;
             padding: 15px;
-            margin: 20px 0;
+            margin: 10px 0;
             border: 2px solid #E2E8F0;
             border-radius: 12px;
             box-sizing: border-box;
@@ -79,11 +79,19 @@
 <body>
 
 <div id="app-card">
-    <div id="tela-inicio" class="tela ativa">
-        <h2 style="color: var(--primary);">Treino de Habilidades</h2>
-        <p>Desenvolva a sua comunicação no trabalho.</p>
-        <input type="text" id="nome-usuario" placeholder="Digite o seu nome...">
-        <button class="btn-geral btn-primario" onclick="iniciarTreino()">Começar Treino →</button>
+    <div id="tela-login" class="tela ativa">
+        <h2 style="color: var(--primary);">Área Restrita</h2>
+        <p>Introduza a sua chave de acesso para começar o treino.</p>
+        <input type="password" id="campo-senha" placeholder="Palavra-passe">
+        <button class="btn-geral btn-primario" onclick="verificarSenha()">Entrar</button>
+        <p id="erro-senha" style="color: red; display: none; font-size: 14px; margin-top: 10px;">Chave incorreta. Tente novamente.</p>
+    </div>
+
+    <div id="tela-inicio" class="tela">
+        <h2 style="color: var(--primary);">Bem-vindo ao Treino</h2>
+        <p>Consultoria em Saúde do Trabalhador</p>
+        <input type="text" id="nome-usuario" placeholder="Como se chama?">
+        <button class="btn-geral btn-primario" onclick="iniciarTreino()">Começar →</button>
     </div>
 
     <div id="tela-treino" class="tela">
@@ -101,11 +109,13 @@
         <h1 style="color: var(--secondary);">Concluído! ✅</h1>
         <p id="mensagem-final"></p>
         <button class="btn-geral btn-whatsapp" onclick="partilharWhatsApp()">Partilhar no WhatsApp 📱</button>
-        <button class="btn-geral" style="background:#CBD5E0" onclick="location.reload()">Refazer</button>
     </div>
 </div>
 
 <script>
+    // --- CONFIGURAÇÃO DE ACESSO ---
+    const SENHA_CORRETA = "RUI2024"; // Pode mudar esta senha quando quiser!
+
     const perguntas = [
         {
             cenario: "O supervisor pede algo no sábado à tarde. Como reage?",
@@ -128,24 +138,30 @@
     let indiceAtual = 0;
     let nomeUsuario = "";
 
-    function trocarTela(idAtiva) {
-        // Esconde todas as telas
-        document.getElementById('tela-inicio').classList.remove('ativa');
-        document.getElementById('tela-treino').classList.remove('ativa');
-        document.getElementById('tela-feedback').classList.remove('ativa');
-        document.getElementById('tela-final').classList.remove('ativa');
-        // Mostra a tela desejada
-        document.getElementById(idAtiva).classList.add('ativa');
+    // FUNÇÕES DE NAVEGAÇÃO
+    function esconderTodas() {
+        document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+    }
+
+    function verificarSenha() {
+        const senhaDigitada = document.getElementById('campo-senha').value;
+        if(senhaDigitada === SENHA_CORRETA) {
+            esconderTodas();
+            document.getElementById('tela-inicio').classList.add('ativa');
+        } else {
+            document.getElementById('erro-senha').style.display = 'block';
+        }
     }
 
     function iniciarTreino() {
         const inputNome = document.getElementById('nome-usuario').value;
         if(inputNome.trim() === "") {
-            alert("Por favor, insira o seu nome para começar.");
+            alert("Insira o seu nome.");
             return;
         }
         nomeUsuario = inputNome;
-        trocarTela('tela-treino');
+        esconderTodas();
+        document.getElementById('tela-treino').classList.add('ativa');
         carregarQuestao();
     }
 
@@ -163,7 +179,8 @@
             btn.innerText = op.texto;
             btn.onclick = () => {
                 document.getElementById('feedback-msg').innerText = op.feedback;
-                trocarTela('tela-feedback');
+                esconderTodas();
+                document.getElementById('tela-feedback').classList.add('ativa');
             };
             lista.appendChild(btn);
         });
@@ -172,11 +189,13 @@
     function proximaPergunta() {
         indiceAtual++;
         if (indiceAtual < perguntas.length) {
-            trocarTela('tela-treino');
+            esconderTodas();
+            document.getElementById('tela-treino').classList.add('ativa');
             carregarQuestao();
         } else {
             document.getElementById('mensagem-final').innerText = "Parabéns, " + nomeUsuario + "! Completou o seu treino de saúde mental.";
-            trocarTela('tela-final');
+            esconderTodas();
+            document.getElementById('tela-final').classList.add('ativa');
         }
     }
 
