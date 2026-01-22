@@ -3,76 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultoria Rui - Acesso Restrito</title>
+    <title>Consultoria Rui - Treino Especializado</title>
     <style>
-        :root {
-            --primary: #4A90E2;
-            --secondary: #2ECC71;
-            --bg: #F0F4F8;
-            --text: #2C3E50;
-        }
-
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh;
-        }
-
-        #app-card { 
-            background: white; 
-            width: 90%; 
-            max-width: 450px; 
-            border-radius: 25px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            padding: 30px; 
-            text-align: center;
-        }
-
+        :root { --primary: #4A90E2; --secondary: #2ECC71; --bg: #F0F4F8; --text: #2C3E50; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        #app-card { background: white; width: 90%; max-width: 450px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 30px; text-align: center; }
         .tela { display: none; }
         .ativa { display: block; animation: fadeIn 0.4s; }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border: 2px solid #E2E8F0;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        .btn-geral {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #E2E8F0; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
+        .btn-geral { width: 100%; padding: 16px; border: none; border-radius: 50px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 10px; transition: 0.2s; }
         .btn-primario { background: var(--primary); color: white; }
-        .btn-opcao { 
-            background: white; 
-            border: 2px solid #E2E8F0; 
-            text-align: left; 
-            margin-bottom: 12px;
-            border-radius: 15px;
-            padding: 15px;
-        }
-        .btn-whatsapp { background: #25D366; color: white; margin-top: 20px; }
-
-        .progress-bg { background: #EDF2F7; height: 10px; border-radius: 5px; margin: 20px 0; }
-        #progress-fill { background: var(--primary); width: 0%; height: 100%; transition: 0.5s; border-radius: 5px; }
-
+        .btn-categoria { background: white; border: 2px solid var(--primary); color: var(--primary); margin-bottom: 8px; text-align: left; padding: 12px 20px; border-radius: 15px; }
+        .btn-categoria:hover { background: var(--primary); color: white; }
+        .btn-opcao { background: white; border: 2px solid #E2E8F0; text-align: left; margin-bottom: 12px; border-radius: 15px; padding: 15px; }
         .feedback-box { background: #EBF8FF; padding: 20px; border-radius: 15px; color: #2B6CB0; margin-bottom: 20px; text-align: left; }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -81,127 +25,109 @@
 <div id="app-card">
     <div id="tela-login" class="tela ativa">
         <h2 style="color: var(--primary);">Área Restrita</h2>
-        <p>Introduza a sua chave de acesso para começar o treino.</p>
         <input type="password" id="campo-senha" placeholder="Palavra-passe">
         <button class="btn-geral btn-primario" onclick="verificarSenha()">Entrar</button>
-        <p id="erro-senha" style="color: red; display: none; font-size: 14px; margin-top: 10px;">Chave incorreta. Tente novamente.</p>
     </div>
 
-    <div id="tela-inicio" class="tela">
-        <h2 style="color: var(--primary);">Bem-vindo ao Treino</h2>
-        <p>Consultoria em Saúde do Trabalhador</p>
-        <input type="text" id="nome-usuario" placeholder="Como se chama?">
-        <button class="btn-geral btn-primario" onclick="iniciarTreino()">Começar →</button>
+    <div id="tela-menu" class="tela">
+        <h2 style="color: var(--primary);">Olá, <span id="span-nome"></span></h2>
+        <p>Escolha a área que deseja treinar hoje:</p>
+        <button class="btn-geral btn-categoria" onclick="iniciarArea('Assertividade')">🎯 Assertividade</button>
+        <button class="btn-geral btn-categoria" onclick="iniciarArea('Desenvoltura')">💬 Desenvoltura Social</button>
+        <button class="btn-geral btn-categoria" onclick="iniciarArea('Sentimentos')">✨ Expressão Positiva</button>
+        <button class="btn-geral btn-categoria" onclick="iniciarArea('Autocontrole')">🛡️ Autocontrole</button>
+        <button class="btn-geral btn-categoria" onclick="iniciarArea('Empatia')">🤝 Empatia</button>
     </div>
 
     <div id="tela-treino" class="tela">
-        <div class="progress-bg"><div id="progress-fill"></div></div>
-        <h3 id="texto-cenario" style="text-align: left;">Cenário...</h3>
+        <h3 id="titulo-area" style="color: var(--primary); font-size: 14px; text-transform: uppercase;"></h3>
+        <p id="texto-cenario" style="text-align: left; font-weight: bold;"></p>
         <div id="lista-opcoes"></div>
     </div>
 
     <div id="tela-feedback" class="tela">
         <div id="feedback-msg" class="feedback-box"></div>
-        <button class="btn-geral btn-primario" onclick="proximaPergunta()">Continuar →</button>
-    </div>
-
-    <div id="tela-final" class="tela">
-        <h1 style="color: var(--secondary);">Concluído! ✅</h1>
-        <p id="mensagem-final"></p>
-        <button class="btn-geral btn-whatsapp" onclick="partilharWhatsApp()">Partilhar no WhatsApp 📱</button>
+        <button class="btn-geral btn-primario" onclick="voltarAoMenu()">Voltar ao Menu</button>
     </div>
 </div>
 
 <script>
-    // --- CONFIGURAÇÃO DE ACESSO ---
-    const SENHA_CORRETA = "RUI2024"; // Pode mudar esta senha quando quiser!
-
-    const perguntas = [
-        {
-            cenario: "O supervisor pede algo no sábado à tarde. Como reage?",
-            opcoes: [
-                { texto: "Respondo logo para ser prestável.", feedback: "Cuidado! Estar sempre disponível aumenta o risco de burnout." },
-                { texto: "Respondo na segunda de forma profissional.", feedback: "Excelente! Definir limites é essencial para a saúde mental." },
-                { texto: "Ignoro e fico ansioso.", feedback: "A omissão gera stress. A comunicação clara é melhor." }
-            ]
-        },
-        {
-            cenario: "Um colega cometeu um erro que o afetou diretamente.",
-            opcoes: [
-                { texto: "Digo: 'Notei um erro no processo, podemos rever?'.", feedback: "Ótimo! Focou no problema e não na culpa." },
-                { texto: "Digo que ele está sempre a errar.", feedback: "Isso gera agressividade e quebra a confiança da equipa." },
-                { texto: "Refaço o trabalho sem dizer nada.", feedback: "Isto sobrecarrega-o e o colega não aprende." }
-            ]
-        }
-    ];
-
-    let indiceAtual = 0;
+    const SENHA_CORRETA = "RUI2024";
     let nomeUsuario = "";
 
-    // FUNÇÕES DE NAVEGAÇÃO
-    function esconderTodas() {
-        document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
-    }
+    const bancoPerguntas = {
+        'Assertividade': {
+            cenario: "Um colega pede-lhe para terminar um relatório dele, mas você já está sobrecarregado.",
+            opcoes: [
+                { t: "Aceito para evitar conflitos.", f: "Isso prejudica a sua saúde. Aprender a dizer 'não' é ser assertivo." },
+                { t: "Digo: 'Agora não posso, tenho as minhas tarefas prioritárias'.", f: "Excelente! Você definiu limites de forma clara e respeitosa." }
+            ]
+        },
+        'Desenvoltura': {
+            cenario: "Num café da empresa, está um grupo de colegas de outro setor que não conhece bem.",
+            opcoes: [
+                { t: "Fico no meu canto a olhar para o telemóvel.", f: "O isolamento reduz a sua rede de apoio social no trabalho." },
+                { t: "Aproximo-me e cumprimento: 'Olá, posso juntar-me a vocês?'.", f: "Muito bem! Iniciativa social ajuda na integração e bem-estar." }
+            ]
+        },
+        'Sentimentos': {
+            cenario: "Um subordinado ou colega fez um trabalho excelente.",
+            opcoes: [
+                { t: "Não digo nada, ele não fez mais que a obrigação.", f: "Expressar gratidão melhora o clima organizacional e motiva a equipa." },
+                { t: "Elogio publicamente o esforço e o resultado.", f: "Ótimo! Reforçar sentimentos positivos fortalece os laços profissionais." }
+            ]
+        },
+        'Autocontrole': {
+            cenario: "Recebe uma crítica injusta e agressiva durante uma reunião.",
+            opcoes: [
+                { t: "Respondo no mesmo tom agressivo.", f: "Reagir no calor do momento costuma agravar o conflito e o stress." },
+                { t: "Respiro fundo e digo: 'Prefiro discutir isto quando estivermos mais calmos'.", f: "Perfeito! Autocontrolar a impulsividade protege a sua imagem e saúde." }
+            ]
+        },
+        'Empatia': {
+            cenario: "Um colega parece triste e está a cometer erros invulgares no trabalho.",
+            opcoes: [
+                { t: "Critico os erros dele para ele se focar mais.", f: "A falta de empatia pode isolar um colega que talvez precise de ajuda." },
+                { t: "Pergunto: 'Notei que não estás bem, queres conversar ou precisas de ajuda?'.", f: "Excelente. Empatia é a base da saúde mental coletiva." }
+            ]
+        }
+    };
+
+    function esconderTodas() { document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa')); }
 
     function verificarSenha() {
-        const senhaDigitada = document.getElementById('campo-senha').value;
-        if(senhaDigitada === SENHA_CORRETA) {
+        if(document.getElementById('campo-senha').value === SENHA_CORRETA) {
+            nomeUsuario = prompt("Como se chama?") || "Consultor";
+            document.getElementById('span-nome').innerText = nomeUsuario;
             esconderTodas();
-            document.getElementById('tela-inicio').classList.add('ativa');
-        } else {
-            document.getElementById('erro-senha').style.display = 'block';
-        }
+            document.getElementById('tela-menu').classList.add('ativa');
+        } else { alert("Senha incorreta!"); }
     }
 
-    function iniciarTreino() {
-        const inputNome = document.getElementById('nome-usuario').value;
-        if(inputNome.trim() === "") {
-            alert("Insira o seu nome.");
-            return;
-        }
-        nomeUsuario = inputNome;
-        esconderTodas();
-        document.getElementById('tela-treino').classList.add('ativa');
-        carregarQuestao();
-    }
-
-    function carregarQuestao() {
-        const p = perguntas[indiceAtual];
+    function iniciarArea(area) {
+        const p = bancoPerguntas[area];
+        document.getElementById('titulo-area').innerText = area;
         document.getElementById('texto-cenario').innerText = p.cenario;
-        document.getElementById('progress-fill').style.width = (indiceAtual / perguntas.length) * 100 + "%";
-        
         const lista = document.getElementById('lista-opcoes');
         lista.innerHTML = "";
-        
         p.opcoes.forEach(op => {
             const btn = document.createElement('button');
             btn.className = "btn-geral btn-opcao";
-            btn.innerText = op.texto;
+            btn.innerText = op.t;
             btn.onclick = () => {
-                document.getElementById('feedback-msg').innerText = op.feedback;
+                document.getElementById('feedback-msg').innerText = op.f;
                 esconderTodas();
                 document.getElementById('tela-feedback').classList.add('ativa');
             };
             lista.appendChild(btn);
         });
+        esconderTodas();
+        document.getElementById('tela-treino').classList.add('ativa');
     }
 
-    function proximaPergunta() {
-        indiceAtual++;
-        if (indiceAtual < perguntas.length) {
-            esconderTodas();
-            document.getElementById('tela-treino').classList.add('ativa');
-            carregarQuestao();
-        } else {
-            document.getElementById('mensagem-final').innerText = "Parabéns, " + nomeUsuario + "! Completou o seu treino de saúde mental.";
-            esconderTodas();
-            document.getElementById('tela-final').classList.add('ativa');
-        }
-    }
-
-    function partilharWhatsApp() {
-        const msg = "Olá! Eu sou o " + nomeUsuario + " e acabei de treinar as minhas Habilidades Sociais! 🚀";
-        window.open("https://wa.me/?text=" + encodeURIComponent(msg), '_blank');
+    function voltarAoMenu() {
+        esconderTodas();
+        document.getElementById('tela-menu').classList.add('ativa');
     }
 </script>
 </body>
